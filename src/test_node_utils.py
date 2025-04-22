@@ -5,67 +5,75 @@ from textnode import TextNode, TextType
 
 
 class TestNodeUtils(unittest.TestCase):
-
-    def test_split_nodes_delimiter_success(self):
-        old_nodes = [TextNode("Hello,World", TextType.PARAGRAPH)]
-        delimiter = ","
-        text_type = TextType.PARAGRAPH
+    def test_split_nodes_code_block(self):
+        node = TextNode("This is text with a `code block` word", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
         expected_nodes = [
-            TextNode("Hello", text_type),
-            TextNode(delimiter, text_type),
-            TextNode("World", text_type),
+            TextNode("This is text with a ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+            TextNode(" word", TextType.TEXT),
         ]
-        result = split_nodes_delimiter(old_nodes, delimiter, text_type)
-        self.assertEqual(result, expected_nodes)
+        self.assertEqual(new_nodes, expected_nodes)
 
-    def test_split_nodes_delimiter_no_delimiter(self):
-        old_nodes = [TextNode("HelloWorld", TextType.PARAGRAPH)]
-        delimiter = ","
-        text_type = TextType.PARAGRAPH
-        with self.assertRaises(ValueError):
-            split_nodes_delimiter(old_nodes, delimiter, text_type)
-
-    def test_split_nodes_delimiter_invalid_node_type(self):
-        old_nodes = ["Hello,World"]  # Not a TextNode
-        delimiter = ","
-        text_type = TextType.PARAGRAPH
-        with self.assertRaises(TypeError):
-            split_nodes_delimiter(old_nodes, delimiter, text_type)
-
-    def test_split_nodes_delimiter_empty_string(self):
-        old_nodes = [TextNode("", TextType.PARAGRAPH)]
-        delimiter = ","
-        text_type = TextType.PARAGRAPH
-        expected_nodes = [TextNode("", text_type)]
-        result = split_nodes_delimiter(old_nodes, delimiter, text_type)
-        self.assertEqual(result, expected_nodes)
-
-    def test_split_nodes_delimiter_multiple_delimiters(self):
-        old_nodes = [TextNode("Hello,,World", TextType.PARAGRAPH)]
-        delimiter = ","
-        text_type = TextType.PARAGRAPH
-        expected_nodes = [
-            TextNode("Hello", text_type),
-            TextNode(delimiter, text_type),
-            TextNode("", text_type),
-            TextNode(delimiter, text_type),
-            TextNode("World", text_type),
-        ]
-        result = split_nodes_delimiter(old_nodes, delimiter, text_type)
-        self.assertEqual(result, expected_nodes)
-
-    def test_split_nodes_various_delimiters(self):
-        delimiters = [";", ".", "\"", "'", "%", "`"]
+    def test_split_nodes_different_delimiters(self):
+        delimiters = [",", ";", ".", "/", "_"]
         for delimiter in delimiters:
-            old_nodes = [TextNode(f"Hello{delimiter}World{delimiter}!", TextType.PARAGRAPH)]
-            text_type = TextType.PARAGRAPH
+            node = TextNode(f"This is text with a {delimiter} word", TextType.TEXT)
+            new_nodes = split_nodes_delimiter([node], delimiter, TextType.CODE)
             expected_nodes = [
-                TextNode("Hello", text_type),
-                TextNode(delimiter, text_type),
-                TextNode("World", text_type),
+                TextNode("This is text with a ", TextType.TEXT),
+                TextNode(" word", TextType.TEXT),
             ]
-            result = split_nodes_delimiter(old_nodes, delimiter, text_type)
-            self.assertEqual(result, expected_nodes)
+            self.assertEqual(new_nodes, expected_nodes)
+
+    def test_split_nodes_invalid_type(self):
+        node = "This is not a TextNode"
+        with self.assertRaises(TypeError):
+            split_nodes_delimiter([node], "`", TextType.CODE)
+
+    def test_split_nodes_empty(self):
+        node = TextNode("", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        expected_nodes = [
+            TextNode("", TextType.TEXT),
+        ]
+        self.assertEqual(new_nodes, expected_nodes)
+
+    def test_split_nodes_multiple_nodes(self):
+        node1 = TextNode("This is text with a `code block` word", TextType.TEXT)
+        node2 = TextNode("Another text with a `code block` word", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node1, node2], "`", TextType.CODE)
+        expected_nodes = [
+            TextNode("This is text with a ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+            TextNode(" word", TextType.TEXT),
+            TextNode("Another text with a ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+            TextNode(" word", TextType.TEXT),
+        ]
+        self.assertEqual(new_nodes, expected_nodes)
+
+    def test_split_nodes_no_delimiter(self):
+        node = TextNode("This is text without a delimiter", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        expected_nodes = [
+            TextNode("This is text without a delimiter", TextType.TEXT),
+        ]
+        self.assertEqual(new_nodes, expected_nodes)
+
+    def test_split_nodes_multiple_delimiters(self):
+        node = TextNode(
+            "This is text with a `code block` and another `code block`", TextType.TEXT
+        )
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        expected_nodes = [
+            TextNode("This is text with a ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+            TextNode(" and another ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+        ]
+        self.assertEqual(new_nodes, expected_nodes)
+
 
 if __name__ == "__main__":
     unittest.main()
