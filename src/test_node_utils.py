@@ -1,6 +1,11 @@
 import unittest
+from re import L
 
-from node_utils import split_nodes_delimiter
+from node_utils import (
+    extract_markdown_images,
+    extract_markdown_links,
+    split_nodes_delimiter,
+)
 from textnode import TextNode, TextType
 
 
@@ -73,6 +78,23 @@ class TestNodeUtils(unittest.TestCase):
             TextNode("code block", TextType.CODE),
         ]
         self.assertEqual(new_nodes, expected_nodes)
+
+    def test_extraction_methods(self):
+        text = "This is a [link](https://www.example.com) and this is a ![image](https://www.example.com/image.png)"
+        links = extract_markdown_links(text)
+        images = extract_markdown_images(text)
+        self.assertEqual(
+            links,
+            [
+                ("link", "https://www.example.com"),
+            ],
+        )
+        self.assertEqual(
+            images,
+            [
+                ("image", "https://www.example.com/image.png"),
+            ],
+        )
 
 
 if __name__ == "__main__":
