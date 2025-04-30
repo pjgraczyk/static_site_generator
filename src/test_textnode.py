@@ -18,7 +18,9 @@ class TestTextNode(unittest.TestCase):
 
     def test_repr(self):
         node = TextNode("This is a text node", TextType.BOLD)
-        if self.assertEqual(repr(node), "TextNode(This is a text node, bold, None)"):
+        if self.assertEqual(
+            repr(node), 'TextNode("This is a text node", TextType.BOLD, "None")'
+        ):
             print("Test passed, repr is correct")
 
     def test_eq_with_url(self):
@@ -30,7 +32,8 @@ class TestTextNode(unittest.TestCase):
     def test_repr_with_url(self):
         node = TextNode("This is a text node", TextType.BOLD, "https://www.google.com")
         if self.assertEqual(
-            repr(node), "TextNode(This is a text node, bold, https://www.google.com)"
+            repr(node),
+            'TextNode("This is a text node", TextType.BOLD, "https://www.google.com")',
         ):
             print("Test passed, repr is correct")
 
