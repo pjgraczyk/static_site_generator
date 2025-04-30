@@ -1,15 +1,17 @@
-from node_utils import text_to_textnodes
+from node_utils import markdown_to_blocks
 from pprintpp import pprint as pp
 
 
 def main():
-    text_to_process = [
-        "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
-    ]
-    for text in text_to_process:
-        print()
-        pp(f"Processing text: {text}")
-        pp(text_to_textnodes(text))
+    test_case = """
+# This is a heading
+
+This is a paragraph of text. It has some **bold** and _italic_ words inside of it.
+
+- This is the first list item in a list block
+- This is a list item
+- This is another list item"""
+    print(markdown_to_blocks(test_case))
 
 
 if __name__ == "__main__":

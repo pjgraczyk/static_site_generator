@@ -3,6 +3,7 @@ import re
 from textnode import TextNode, TextType
 from typing import List, Optional
 
+
 def split_nodes_delimiter(nodes, delimiter, new_type):
     result = []
     for node in nodes:
@@ -42,6 +43,7 @@ def extract_markdown_links(text):
     regexp_link = r"(?<!!)\[(.*?)\]\((.*?)\)"
     links = re.findall(regexp_link, text)
     return links
+
 
 def split_nodes_image(old_nodes):
     new_nodes = []
@@ -96,17 +98,33 @@ def split_nodes_link(old_nodes):
             new_nodes.append(TextNode(original_text, TextType.TEXT))
     return new_nodes
 
+
 def text_to_textnodes(text: str) -> List[TextNode]:
     map = {
         TextType.BOLD: "**",
         TextType.CODE: "`",
         TextType.ITALIC: "*",
-        TextType.ITALIC: "_"
+        TextType.ITALIC: "_",
     }
-    
+
     new_nodes = [TextNode(text, TextType.TEXT)]
     for text_type, delimiter in map.items():
         new_nodes = split_nodes_delimiter(new_nodes, delimiter, text_type)
     new_nodes = split_nodes_image(new_nodes)
     new_nodes = split_nodes_link(new_nodes)
     return new_nodes
+
+
+def markdown_to_blocks(markdown: str):
+    """
+    Convert markdown text to a list of TextNode objects.
+    """
+
+    def format(blocks):
+        blocks = [block.strip() for block in blocks if block.strip()]
+        # blocks = [block.x() for block in blocks]
+        return blocks
+
+    blocks = markdown.split("\n\n")
+    blocks_formatted = format(blocks)
+    return blocks_formatted
