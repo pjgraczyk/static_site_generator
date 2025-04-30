@@ -1,7 +1,7 @@
 import re
 
 from textnode import TextNode, TextType
-from typing import List, Optional
+from typing import List
 
 
 def split_nodes_delimiter(nodes, delimiter, new_type):
@@ -113,18 +113,3 @@ def text_to_textnodes(text: str) -> List[TextNode]:
     new_nodes = split_nodes_image(new_nodes)
     new_nodes = split_nodes_link(new_nodes)
     return new_nodes
-
-
-def markdown_to_blocks(markdown: str):
-    """
-    Convert markdown text to a list of TextNode objects.
-    """
-
-    def format(blocks):
-        blocks = [block.strip() for block in blocks if block.strip()]
-        # blocks = [block.x() for block in blocks]
-        return blocks
-
-    blocks = markdown.split("\n\n")
-    blocks_formatted = format(blocks)
-    return blocks_formatted
