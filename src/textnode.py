@@ -6,29 +6,9 @@ class TextType(Enum):
     TEXT = "text"
     BOLD = "bold"
     ITALIC = "italic"
-    UNDERLINE = "underline"
-    STRIKETHROUGH = "strikethrough"
     CODE = "code"
-    SUBSCRIPT = "subscript"
-    SUPERSCRIPT = "superscript"
-    QUOTE = "quote"
-    BLOCKQUOTE = "blockquote"
-    CODEBLOCK = "codeblock"
-    UNORDEREDLIST = "unorderedlist"
-    ORDEREDLIST = "orderedlist"
-    LISTITEM = "listitem"
-    HEADING1 = "heading1"
-    HEADING2 = "heading2"
-    HEADING3 = "heading3"
-    HEADING4 = "heading4"
-    HEADING5 = "heading5"
-    HEADING6 = "heading6"
-    PARAGRAPH = "paragraph"
     LINK = "link"
     IMAGE = "image"
-    TABLE = "table"
-    TABLEROW = "tablerow"
-
 
 class TextNode:
     def __init__(self, text, text_type, url=None, alt=None):
@@ -47,31 +27,31 @@ class TextNode:
     def __repr__(self):
         return f'TextNode("{self.text}", {self.text_type}, "{self.url}")'
 
-    def text_node_to_html_node(self, text_node):
-        match text_node.text_type:
+    def text_node_to_html_node(self):
+        match self.text_type:
             case TextType.TEXT:
-                return LeafNode(tag=None, value=text_node.text)
+                return LeafNode(tag=None, value=self.text)
             case TextType.BOLD:
-                return LeafNode(tag="b", value=text_node.text)
+                return LeafNode(tag="b", value=self.text)
             case TextType.ITALIC:
-                return LeafNode(tag="i", value=text_node.text)
+                return LeafNode(tag="i", value=self.text)
             case TextType.CODE:
-                return LeafNode(tag="code", value=text_node.text)
+                return LeafNode(tag="code", value=self.text)
             case TextType.LINK:
                 return LeafNode(
                     tag="a",
-                    value=text_node.text,
-                    props={"href": text_node.url},
+                    value=self.text,
+                    props={"href": self.url},
                 )
             case TextType.IMAGE:
-                if text_node.alt is None:
+                if self.alt is None:
                     raise ValueError("Alt text is required for images")
-                if text_node.url is None:
+                if self.url is None:
                     raise ValueError("Url source is required for images")
                 return LeafNode(
                     tag="img",
                     value="",
-                    props={"alt": text_node.alt, "src": text_node.url},
+                    props={"alt": self.alt, "src": self.url},
                 )
             case _:
-                raise ValueError(f"Unknown text type: {text_node.text_type}")
+                raise ValueError(f"Unknown text type: {self.text_type}")
