@@ -22,29 +22,27 @@ def markdown_to_blocks(markdown: str):
 
 
 def block_to_block_type(block):
-    match block:
-        case block if block.startswith("#"):
-            match block:
-                case block if block.startswith("######"):
-                    return BlockType.HEADING, 6
-                case block if block.startswith("#####"):
-                    return BlockType.HEADING, 5
-                case block if block.startswith("####"):
-                    return BlockType.HEADING, 4
-                case block if block.startswith("###"):
-                    return BlockType.HEADING, 3
-                case block if block.startswith("##"):
-                    return BlockType.HEADING, 2
-                case block if block.startswith("#"):
-                    return BlockType.HEADING, 1
-            return BlockType.HEADING, 1
-        case block if block.startswith("```") and block.endswith("```"):
-            return BlockType.CODE, None
-        case block if all(line.startswith(">") for line in block.split("\n") if line):
-            return BlockType.QUOTE, None
-        case block if all(line.startswith("- ") for line in block.split("\n") if line):
-            return BlockType.UNORDERED_LIST, None
-        case block if all(re.match(r"^\d+\.", line) for line in block.split("\n") if line):
-            return BlockType.ORDERED_LIST, None
-        case _:
-            return BlockType.PARAGRAPH, None
+    if block.startswith("#"):
+        return BlockType.HEADING
+    elif block.startswith("```") and block.endswith("```"):
+        return BlockType.CODE
+    elif block.startswith(">"):
+        for line in block.split("\n"):
+            if line.strip() and not line.startswith(">"):
+                return BlockType.PARAGRAPH
+            else:
+                return BlockType.QUOTE
+    elif block.startswith("- "):
+        for line in block.split("\n"):
+            if line.strip() and not line.startswith("- "):
+                return BlockType.PARAGRAPH
+            else:
+                return BlockType.UNORDERED_LIST
+    elif block.startswith("1. "):
+        for line in block.split("\n"):
+            if line.strip() and not re.match(r"^\d+\.\s", line):
+                return BlockType.PARAGRAPH
+            else:
+                return BlockType.ORDERED_LIST
+    else:
+        return BlockType.PARAGRAPH
