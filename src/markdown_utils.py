@@ -1,6 +1,7 @@
 import re
 
 from enum import Enum
+from node_utils import text_to_textnodes
 from htmlnode import HTMLNode
 
 class BlockType(Enum):
@@ -47,36 +48,109 @@ def block_to_block_type(block):
     else:
         return BlockType.PARAGRAPH
 
-def markdown_to_html(markdown: str) -> str:
-    md_blocks = markdown_to_blocks(markdown)
-    md_blocks_types = []
-    for block in md_blocks:
-        block_type = block_to_block_type(block)
-        md_blocks_types.append(block_type)
-        
-    ## TODO: Implement the conversion to TextNode, then convert it to HTMLNode
-    text_nodes_dict = {}
-    for md_block, block_type in zip(md_blocks, md_blocks_types):
-        children_textnodes = text_to_textnodes(md_block)
-        children = []
-        for child in children_textnodes:
-            children.append(child.text_node_to_html_node())
-            
-        match block_type:
-            case BlockType.HEADING:
-                heading_level = md_block.count("#")
-                return f"<h{heading_level}>{children}</h{heading_level}>"
-            case BlockType.CODE:
-                return f"<code><pre>{children}</pre></code>"
-            case BlockType.QUOTE:
-                return f"<blockquote>{children}</blockquote>"
-            case BlockType.UNORDERED_LIST:
-                return f"<ul>{children}</ul>"
-            case BlockType.ORDERED_LIST:
-                return f"<ol>{children}</ol>"
-            case BlockType.PARAGRAPH:
-                return f"<p>{children}</p>"
-            case _:
-                raise ValueError(f"Unknown block type: {block_type}")
-            
-            
+
+def block_to_content(block):
+    """
+    Convert a markdown block to its content.
+    """
+    if block.startswith("#"):
+        return block[block.index(" ") + 1 :]
+    elif block.startswith("```") and block.endswith("```"):
+        return block[3:-3].strip()
+    elif block.startswith(">"):
+        new_block = ""
+        for line in block.split("\n"):
+            if line.strip() and not line.startswith(">"):
+                new_block += line.strip() + "\n"
+            else:
+                new_block += line[1:].strip() + "\n"
+        return new_block.strip()
+    elif block.startswith("- "):
+        new_block = ""
+        for line in block.split("\n"):
+            if line.strip() and not line.startswith("- "):
+                new_block += line.strip() + "\n"
+            else:
+                new_block += line[2:].strip() + "\n"
+        return new_block.strip()
+    elif block.startswith("1. "):
+        new_block = ""
+        for line in block.split("\n"):
+            if line.strip() and not re.match(r"^\d+\.\s", line):
+                new_block += line.strip() + "\n"
+            else:
+                new_block += line[line.index(".") + 1 :].strip() + "\n"
+        return new_block.strip()
+    else:
+        return block.strip()
+
+def markdown_to_html_node(markdown: str):
+    html_nodes = []
+    for md_block in markdown_to_blocks(markdown):
+        block_type = block_to_block_type(md_block)
+        children = block_to_content(md_block)
+        text_nodes = text_to_textnodes(children)
+        leaf_nodes = [node.text_node_to_html_node() for node in text_nodes]
+
+        if block_type == BlockType.HEADING:
+            heading_level = md_block.count("#", 0, md_block.find(" "))
+            if heading_level < 1 or heading_level > 6:
+                raise ValueError("Invalid heading level")
+            html_nodes.append(
+                HTMLNode(
+                    tag=f"h{heading_level}",
+                    children=leaf_nodes,
+                )
+            )
+        elif block_type == BlockType.CODE:
+            html_nodes.append(
+                HTMLNode(
+                    tag="pre",
+                    children=[
+                        HTMLNode(
+                            tag="code",
+                            children=leaf_nodes,
+                        )
+                    ],
+                )
+            )
+        elif block_type == BlockType.QUOTE:
+            html_nodes.append(
+                HTMLNode(
+                    tag="blockquote",
+                    children=leaf_nodes,
+                )
+            )
+        elif block_type == BlockType.UNORDERED_LIST:
+            items = [
+                HTMLNode(tag="li", children=[item_node])
+                for item_node in [HTMLNode(tag=None, children=[node]) for node in leaf_nodes]
+            ]
+            html_nodes.append(
+                HTMLNode(
+                    tag="ul",
+                    children=items,
+                )
+            )
+        elif block_type == BlockType.ORDERED_LIST:
+            items = [
+                HTMLNode(tag="li", children=[item_node])
+                for item_node in [HTMLNode(tag=None, children=[node]) for node in leaf_nodes]
+            ]
+            html_nodes.append(
+                HTMLNode(
+                    tag="ol",
+                    children=items,
+                )
+            )
+        elif block_type == BlockType.PARAGRAPH:
+            html_nodes.append(
+                HTMLNode(
+                    tag="p",
+                    children=leaf_nodes,
+                )
+            )
+        else:
+            raise ValueError(f"Unknown block type: {block_type}")
+
+    return html_nodes

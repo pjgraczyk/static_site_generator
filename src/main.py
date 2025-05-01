@@ -1,5 +1,6 @@
 import markdown_utils
 
+
 def main():
     md = """
     ## Heading 1
@@ -21,7 +22,8 @@ def main():
     - Item 3
 
 """
-    print(markdown_utils.markdown_to_html(md))
+    print(markdown_utils.markdown_to_html_node(md))
+
 
 if __name__ == "__main__":
     main()

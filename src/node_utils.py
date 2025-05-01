@@ -104,6 +104,7 @@ def text_to_textnodes(text: str) -> List[TextNode]:
         TextType.BOLD: "**",
         TextType.CODE: "`",
         TextType.ITALIC: "*",
+        TextType.ITALIC: "_",
     }
 
     new_nodes = [TextNode(text, TextType.TEXT)]

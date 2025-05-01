@@ -74,21 +74,22 @@ def hello_world():
         block = ""
         block_type = block_to_block_type(block)
         self.assertEqual(block_type, (BlockType.PARAGRAPH))
-    
+
     def test_block_to_block_type_code(self):
         block = "```\ncode\n```"
         block_type = block_to_block_type(block)
         self.assertEqual(block_type, (BlockType.CODE))
-        
+
     def test_block_to_block_type_quote(self):
         block = "> This is a quote"
         block_type = block_to_block_type(block)
         self.assertEqual(block_type, (BlockType.QUOTE))
-    
+
     def test_block_to_block_type_unordered_list(self):
         block = "- Item 1\n\n- Item 2"
         block_type = block_to_block_type(block)
         self.assertEqual(block_type, (BlockType.UNORDERED_LIST))
-        
+
+
 if __name__ == "__main__":
     unittest.main()

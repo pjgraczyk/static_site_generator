@@ -1,5 +1,5 @@
 from enum import Enum
-from leafnode import LeafNode
+from htmlnode import LeafNode
 
 
 class TextType(Enum):
@@ -9,6 +9,7 @@ class TextType(Enum):
     CODE = "code"
     LINK = "link"
     IMAGE = "image"
+
 
 class TextNode:
     def __init__(self, text, text_type, url=None, alt=None):

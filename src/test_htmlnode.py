@@ -49,7 +49,7 @@ class TestHTMLNode(unittest.TestCase):
             node.__repr__(),
             "HTMLNode(p, What a strange world, children: None, {'class': 'primary'})",
         )
-        
+
     def test_to_html(self):
         node = ParentNode(
             "p",
@@ -122,7 +122,7 @@ class TestHTMLNode(unittest.TestCase):
         parent_node = ParentNode("div", [child_node])
         expected_html = "<div><span><b>Bold</b> and <i>Italic</i></span></div>"
         self.assertEqual(parent_node.to_html(), expected_html)
-        
+
     def test_to_html_with_value_and_tag(self):
         node = LeafNode("span", "Hello, Leaf!")
         self.assertEqual(node.to_html(), "<span>Hello, Leaf!</span>")
