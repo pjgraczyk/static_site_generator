@@ -61,12 +61,12 @@ def hello_world():
         blocks = markdown_to_blocks(md)
         block_types = [block_to_block_type(block) for block in blocks]
         expected_types = [
-            (BlockType.HEADING, 1),
-            (BlockType.PARAGRAPH, None),
-            (BlockType.CODE, None),
-            (BlockType.QUOTE, None),
-            (BlockType.UNORDERED_LIST, None),
-            (BlockType.ORDERED_LIST, None),
+            (BlockType.HEADING),
+            (BlockType.PARAGRAPH),
+            (BlockType.CODE),
+            (BlockType.QUOTE),
+            (BlockType.UNORDERED_LIST),
+            (BlockType.ORDERED_LIST),
         ]
         self.assertEqual(block_types, expected_types)
 
