@@ -46,3 +46,11 @@ def block_to_block_type(block):
                 return BlockType.ORDERED_LIST
     else:
         return BlockType.PARAGRAPH
+
+def markdown_to_html(markdown: str) -> str:
+    md_blocks = markdown_to_blocks(markdown)
+    md_blocks_types = []
+    for block in md_blocks:
+        block_type = block_to_block_type(block)
+        md_blocks_types.append(block_type)
+    return md_blocks_types
