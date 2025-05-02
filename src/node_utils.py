@@ -67,6 +67,7 @@ def split_nodes_image(old_nodes):
                     image[0],
                     TextType.IMAGE,
                     image[1],
+                    alt=image[0],
                 )
             )
             original_text = sections[1]

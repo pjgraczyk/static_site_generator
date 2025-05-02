@@ -22,8 +22,8 @@ def main():
     - Item 3
 
 """
-    print(markdown_utils.markdown_to_html_node(md))
-
-
+    html_nodes = markdown_utils.markdown_to_html_node(md)
+    html = html_nodes.to_html()
+    print(html)
 if __name__ == "__main__":
     main()

@@ -38,7 +38,7 @@ class TestHTMLNode(unittest.TestCase):
             None,
         )
 
-    def test_repr(self):
+    def test_repr_html_node(self):
         node = HTMLNode(
             "p",
             "What a strange world",
@@ -140,7 +140,7 @@ class TestHTMLNode(unittest.TestCase):
         node = LeafNode(None, "Just a value")
         self.assertEqual(node.to_html(), "Just a value")
 
-    def test_repr(self):
+    def test_repr_leaf_node(self):
         node = LeafNode("span", "Hello, Leaf!", {"class": "highlight"})
         self.assertEqual(
             node.__repr__(),
