@@ -75,8 +75,8 @@ def generate_page(from_path, template_path, dest_path, basepath=""):
     title = extract_title(from_path)
     html_body = format_html(content)
     html_content = template.render(Title=title, Content=html_body)
-    html_content = html_content.replace('href="/', f'href="{basepath}/')
-    html_content = html_content.replace('src="/', f'src="{basepath}/')
+    html_content = html_content.replace('href="/', f'href="{basepath}')
+    html_content = html_content.replace('src="/', f'src="{basepath}')
 
     log_message(f"The HTML content is following: {html_body}", "info")
     log_message(f"The title of the webpage is following: {html_body}", "info")
