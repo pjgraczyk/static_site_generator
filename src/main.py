@@ -18,10 +18,11 @@ def initialize_logger():
     try:
         logging.basicConfig(
             filename=log_filepath,
-            filemode='w',
+            filemode='a' if os.path.exists(log_filepath) else 'w',
             level=logging.INFO,
             format='%(asctime)s %(levelname)s %(message)s'
         )
+        log_message(f'Logger initialized at location - {os.path.abspath(log_filepath)}')
         print(f'Log file created at {log_filepath}')
     except Exception as e:
         raise Exception(e)
@@ -35,18 +36,19 @@ def log_message(message, level='info'):
     logger = logging.getLogger()
     level = level.lower()  
     try:
-        if level == 'info':
-            logger.info(message)
-        elif level == 'warning':
-            logger.warning(message)
-        elif level == 'error':
-            logger.error(message)
-        elif level == 'debug':
-            logger.debug(message)
-        elif level == 'critical':
-            logger.critical(message)
-        else:
-            logger.info(message)
+        match level:
+            case 'info':
+                logger.info(message)
+            case 'warning':
+                logger.warning(message)
+            case 'error':
+                logger.error(message)
+            case 'debug':
+                logger.debug(message)
+            case 'critical':
+                logger.critical(message)
+            case _:
+                logger.info(message)
     finally:
         logging.shutdown()
 
@@ -70,8 +72,6 @@ def move_src_to_dest_dir(src_path, dest_dir):
 
 def main():
     initialize_logger()
-    logging.info("Logger initialized and ready to use.")
-    logging.shutdown()
 
 if __name__ == "__main__":
     main()
