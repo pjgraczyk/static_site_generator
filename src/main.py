@@ -11,9 +11,9 @@ def main():
     initialize_logger()
     log_message("Starting the script", "info")
 
-    base_path = sys.argv[1]
+    base_path = sys.argv[1] if len(sys.argv) > 1 else os.path.abspath(os.path.join(__file__, "../../"))
     src_path = os.path.join(base_path, "static")
-    dest_path = os.path.join(base_path, "public")
+    dest_path = os.path.join(base_path, "docs")
     content_path = os.path.join(base_path, "content")
     template_path = base_path
 
@@ -24,6 +24,7 @@ def main():
         from_path=content_path,
         template_path=template_path,
         dest_path=dest_path,
+        basepath=base_path,
     )
     log_message("HTML pages generated recursively", "info")
     log_message("Script completed successfully", "info")

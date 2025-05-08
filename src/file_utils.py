@@ -65,7 +65,7 @@ def move_src_to_dest_dir(src_path, dest_dir):
     log_message("Moving process completed", "info")
 
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath="/"):
     env = Environment(loader=FileSystemLoader(template_path))
     template = env.get_template("template.html")
     with open(from_path, "r", encoding="utf-8") as file:
@@ -75,6 +75,9 @@ def generate_page(from_path, template_path, dest_path):
     title = extract_title(from_path)
     html_body = format_html(content)
     html_content = template.render(Title=title, Content=html_body)
+    html_content = html_content.replace('href="/', f'href="{basepath}')
+    html_content = html_content.replace('src="/', f'src="{basepath}')
+
     log_message(f"The HTML content is following: {html_body}", "info")
     log_message(f"The title of the webpage is following: {html_body}", "info")
     log_message("HTML content generated from markdown", "info")
@@ -85,7 +88,7 @@ def generate_page(from_path, template_path, dest_path):
     log_message("HTML page generation completed", "info")
 
 
-def generate_pages_recursive(from_path, template_path, dest_path):
+def generate_pages_recursive(from_path, template_path, dest_path, basepath="/"):
     if os.path.isdir(from_path):
         # Process all .md files in the current directory
         for item in os.listdir(from_path):
@@ -93,7 +96,8 @@ def generate_pages_recursive(from_path, template_path, dest_path):
             if os.path.isfile(item_path) and item.endswith(".md"):
                 if not os.path.exists(dest_path):
                     os.makedirs(dest_path)
-                generate_page(item_path, template_path, dest_path)
+                generate_page(item_path, template_path, dest_path, basepath)
+                log_message(f"Generated page for: {item_path}", "info")
         for item in os.listdir(from_path):
             item_path = os.path.join(from_path, item)
             if os.path.isdir(item_path):
@@ -103,7 +107,10 @@ def generate_pages_recursive(from_path, template_path, dest_path):
                 if not os.path.exists(new_dest_dir):
                     os.makedirs(new_dest_dir)
                     log_message(f"Created directory: {new_dest_dir}", "info")
-                generate_pages_recursive(item_path, template_path, new_dest_dir)
+                generate_pages_recursive(item_path, template_path, new_dest_dir, basepath)
+        log_message(f"Recursively processing directory: {from_path}", "info")
+        log_message(f"Directory processed: {from_path}", "info")
+        
     else:
         log_message(f"Provided path is not a directory: {from_path}", "error")
         raise ValueError(f"The provided path is not a directory: {from_path}")
