@@ -65,7 +65,7 @@ def move_src_to_dest_dir(src_path, dest_dir):
     log_message("Moving process completed", "info")
 
 
-def generate_page(from_path, template_path, dest_path, basepath="/"):
+def generate_page(from_path, template_path, dest_path, basepath=""):
     env = Environment(loader=FileSystemLoader(template_path))
     template = env.get_template("template.html")
     with open(from_path, "r", encoding="utf-8") as file:
@@ -75,8 +75,8 @@ def generate_page(from_path, template_path, dest_path, basepath="/"):
     title = extract_title(from_path)
     html_body = format_html(content)
     html_content = template.render(Title=title, Content=html_body)
-    html_content = html_content.replace('href="/', f'href="{basepath}')
-    html_content = html_content.replace('src="/', f'src="{basepath}')
+    html_content = html_content.replace('href="/', f'href="{basepath}/')
+    html_content = html_content.replace('src="/', f'src="{basepath}/')
 
     log_message(f"The HTML content is following: {html_body}", "info")
     log_message(f"The title of the webpage is following: {html_body}", "info")
@@ -88,7 +88,7 @@ def generate_page(from_path, template_path, dest_path, basepath="/"):
     log_message("HTML page generation completed", "info")
 
 
-def generate_pages_recursive(from_path, template_path, dest_path, basepath="/"):
+def generate_pages_recursive(from_path, template_path, dest_path, basepath=""):
     if os.path.isdir(from_path):
         # Process all .md files in the current directory
         for item in os.listdir(from_path):

@@ -1,4 +1,14 @@
 #!/bin/sh
-source ./.venv/bin/activate
-python3 src/main.py
-cd public && python3 -m http.server 8888
+if [ -d ".venv" ]; then
+    source .venv/bin/activate
+    uv sync
+else
+    echo "Virtual environment not found. Creating with uv..."
+    uv venv .venv
+    uv sync
+    source .venv/bin/activate
+fi
+python src/main.py
+
+cd docs
+exec python -m http.server 8888

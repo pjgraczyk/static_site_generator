@@ -10,12 +10,13 @@ from file_utils import (
 def main():
     initialize_logger()
     log_message("Starting the script", "info")
+    
+    base_path = sys.argv[1] if len(sys.argv) > 1 else ''
 
-    base_path = sys.argv[1] if len(sys.argv) > 1 else os.path.abspath(os.path.join(__file__, "../../"))
-    src_path = os.path.join(base_path, "static")
-    dest_path = os.path.join(base_path, "docs")
-    content_path = os.path.join(base_path, "content")
-    template_path = base_path
+    src_path = os.path.abspath(os.path.join(__file__, "../../static"))
+    dest_path = os.path.abspath(os.path.join(__file__, "../../docs"))
+    content_path = os.path.abspath(os.path.join(__file__, "../../content"))
+    template_path = os.path.abspath(os.path.join(__file__, "../../"))
 
     move_src_to_dest_dir(src_path=src_path, dest_dir=dest_path)
     log_message("Source files moved to destination directory", "info")
