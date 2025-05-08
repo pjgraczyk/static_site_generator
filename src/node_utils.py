@@ -102,14 +102,14 @@ def split_nodes_link(old_nodes):
 
 def text_to_textnodes(text: str) -> List[TextNode]:
     map = {
-        TextType.BOLD: "**",
-        TextType.CODE: "`",
-        TextType.ITALIC: "*",
-        TextType.ITALIC: "_",
+        "**": TextType.BOLD,
+        "`": TextType.CODE,
+        "*": TextType.ITALIC,
+        "_": TextType.ITALIC,
     }
 
     new_nodes = [TextNode(text, TextType.TEXT)]
-    for text_type, delimiter in map.items():
+    for delimiter, text_type in map.items():
         new_nodes = split_nodes_delimiter(new_nodes, delimiter, text_type)
     new_nodes = split_nodes_image(new_nodes)
     new_nodes = split_nodes_link(new_nodes)

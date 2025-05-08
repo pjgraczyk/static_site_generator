@@ -92,7 +92,7 @@ class TestNodeUtils(unittest.TestCase):
         )
 
     def test_text_to_textnode_split(self):
-        text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        text = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
         nodes = text_to_textnodes(text)
         expected_nodes = [
             TextNode("This is ", TextType.TEXT),

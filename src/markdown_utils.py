@@ -178,3 +178,14 @@ def markdown_to_html_node(markdown: str):
             raise ValueError(f"Unknown block type: {block_type}")
 
     return ParentNode(tag="div", children=html_nodes)
+
+
+def extract_title(markdown: str):
+    """
+    Extract the title from the markdown text.
+    """
+    blocks = markdown_to_blocks(markdown)
+    for block in blocks:
+        if block.startswith("# "):
+            return block.split("\n")[0][2:]
+    return None

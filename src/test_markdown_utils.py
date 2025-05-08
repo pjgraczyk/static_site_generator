@@ -4,6 +4,7 @@ from markdown_utils import (
     markdown_to_blocks,
     block_to_block_type,
     markdown_to_html_node,
+    extract_title,
     BlockType,
 )
 
@@ -13,7 +14,7 @@ class TestMarkdownUtils(unittest.TestCase):
         md = """
 This is **bolded** paragraph
 
-This is another paragraph with _italic_ text and `code` here
+This is another paragraph with *italic* text and `code` here
 This is the same paragraph on a new line
 
 - This is a list
@@ -24,7 +25,7 @@ This is the same paragraph on a new line
             blocks,
             [
                 "This is **bolded** paragraph",
-                "This is another paragraph with _italic_ text and `code` here\nThis is the same paragraph on a new line",
+                "This is another paragraph with *italic* text and `code` here\nThis is the same paragraph on a new line",
                 "- This is a list\n- with items",
             ],
         )
@@ -101,7 +102,7 @@ This is **bolded** paragraph
 text in a p
 tag here
 
-This is another paragraph with _italic_ text and `code` here
+This is another paragraph with *italic* text and `code` here
 
     """
 
@@ -204,7 +205,7 @@ the **same** even with inline stuff
 
     def test_italic(self):
         md = """
-_This is italic text_
+*This is italic text*
 """
 
         node = markdown_to_html_node(md)
@@ -236,6 +237,14 @@ _This is italic text_
             html,
             "<div><h1>Heading 1</h1><h2>Heading 2</h2><h3>Heading 3</h3><h4>Heading 4</h4><h5>Heading 5</h5><h6>Heading 6</h6></div>",
         )
+
+    def test_extract_title(self):
+        md = """
+# Title
+This is a paragraph.
+"""
+        title = extract_title(md)
+        self.assertEqual(title, "Title")
 
 
 if __name__ == "__main__":
