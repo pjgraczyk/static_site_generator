@@ -64,7 +64,6 @@ def block_to_block_type(block):
     return BlockType.PARAGRAPH
 
 
-
 def block_to_content(block):
     """
     Convert a markdown block to its content.
@@ -72,7 +71,7 @@ def block_to_content(block):
     if block.startswith("#"):
         return block[block.index(" ") + 1 :]
     elif block.startswith("```") and block.endswith("```"):
-        return block[3:-3].lstrip('\n')
+        return block[3:-3].lstrip("\n")
     elif block.startswith(">"):
         new_block = ""
         for line in block.split("\n"):
@@ -154,9 +153,7 @@ def markdown_to_html_node(markdown: str):
                         for node in text_to_textnodes(content)
                     ]
                     items.append(ParentNode(tag="li", children=children))
-            html_nodes.append(
-                ParentNode(tag="ul", children=items)
-            )
+            html_nodes.append(ParentNode(tag="ul", children=items))
         elif block_type == BlockType.ORDERED_LIST:
             items = []
             for line in md_block.split("\n"):
@@ -169,9 +166,7 @@ def markdown_to_html_node(markdown: str):
                         for node in text_to_textnodes(content)
                     ]
                     items.append(ParentNode(tag="li", children=children))
-            html_nodes.append(
-                ParentNode(tag="ol", children=items)
-            )
+            html_nodes.append(ParentNode(tag="ol", children=items))
         elif block_type == BlockType.PARAGRAPH:
             html_nodes.append(
                 ParentNode(

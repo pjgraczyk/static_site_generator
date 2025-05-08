@@ -94,7 +94,7 @@ def hello_world():
         block = "- Item 1\n\n- Item 2"
         block_type = block_to_block_type(block)
         self.assertEqual(block_type, (BlockType.UNORDERED_LIST))
-        
+
     def test_paragraphs(self):
         md = """
 This is **bolded** paragraph
@@ -139,6 +139,7 @@ the **same** even with inline stuff
             html,
             "<div><blockquote>This is a quote\nwith a new line</blockquote></div>",
         )
+
     def test_unordered_list(self):
         md = """
 - Item 1
@@ -152,6 +153,7 @@ the **same** even with inline stuff
             html,
             "<div><ul><li>Item 1</li><li>Item 2</li><li>Item 3</li></ul></div>",
         )
+
     def test_ordered_list(self):
         md = """
 1. First item
@@ -165,6 +167,7 @@ the **same** even with inline stuff
             html,
             "<div><ol><li>First item</li><li>Second item</li><li>Third item</li></ol></div>",
         )
+
     def test_image(self):
         md = """
 ![alt text](https://example.com/image.png) Hello
@@ -176,6 +179,7 @@ the **same** even with inline stuff
             html,
             '<div><p><img alt="alt text" src="https://example.com/image.png"></img> Hello</p></div>',
         )
+
     def test_link(self):
         md = """
 [Link text](https://example.com)
@@ -187,6 +191,7 @@ the **same** even with inline stuff
             html,
             '<div><p><a href="https://example.com">Link text</a></p></div>',
         )
+
     def test_bold(self):
         md = """This excerpt is **This is bold text** and this one is not"""
 
@@ -194,8 +199,9 @@ the **same** even with inline stuff
         html = node.to_html()
         self.assertEqual(
             html,
-            '<div><p>This excerpt is <b>This is bold text</b> and this one is not</p></div>',
+            "<div><p>This excerpt is <b>This is bold text</b> and this one is not</p></div>",
         )
+
     def test_italic(self):
         md = """
 _This is italic text_
@@ -207,7 +213,7 @@ _This is italic text_
             html,
             "<div><p><i>This is italic text</i></p></div>",
         )
-    
+
     def test_heading_levels(self):
         md = """
 # Heading 1
@@ -230,6 +236,7 @@ _This is italic text_
             html,
             "<div><h1>Heading 1</h1><h2>Heading 2</h2><h3>Heading 3</h3><h4>Heading 4</h4><h5>Heading 5</h5><h6>Heading 6</h6></div>",
         )
-        
+
+
 if __name__ == "__main__":
     unittest.main()
