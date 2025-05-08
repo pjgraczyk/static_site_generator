@@ -1,4 +1,0 @@
-2025-05-08 06:42:07,394 INFO Logger initialized at /workspaces/static_site_generator/logs/log_2025-05-08.txt
-2025-05-08 06:44:27,726 INFO Logger initialized at /workspaces/static_site_generator/logs/log_2025-05-08.txt
-2025-05-08 06:44:51,706 INFO Logger initialized at /workspaces/static_site_generator/logs/log_2025-05-08.txt
-2025-05-08 06:44:53,525 INFO Logger initialized at /workspaces/static_site_generator/logs/log_2025-05-08.txt

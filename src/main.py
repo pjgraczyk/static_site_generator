@@ -2,6 +2,7 @@ import shutil
 import os
 import logging
 import datetime
+from markdown_utils import markdown_to_html_node
 
 
 def initialize_logger():
@@ -111,12 +112,16 @@ def move_src_to_dest_dir(src_path, dest_dir):
 
 
 def main():
-    initialize_logger()
-    log_message("Starting the script", "info")
-    src_path = os.path.abspath(os.path.join(__file__, "../../static"))
-    dest_path = os.path.abspath(os.path.join(__file__, "../../public"))
-    move_src_to_dest_dir(src_path=src_path, dest_dir=dest_path)
-    log_message("Script completed successfully", "info")
+    # initialize_logger()
+    # log_message("Starting the script", "info")
+    # src_path = os.path.abspath(os.path.join(__file__, "../../static"))
+    # dest_path = os.path.abspath(os.path.join(__file__, "../../public"))
+    # move_src_to_dest_dir(src_path=src_path, dest_dir=dest_path)
+    # log_message("Script completed successfully", "info")
+    with open("content/ipsum_lorem.md", "r") as file:
+        content = file.read()
+    print(content)
+    print(markdown_to_html_node(content).to_html())
 
 
 if __name__ == "__main__":
