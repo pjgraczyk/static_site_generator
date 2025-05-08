@@ -1,7 +1,7 @@
 import os
 import shutil
 from lxml import etree, html
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+from jinja2 import Environment, FileSystemLoader
 from markdown_utils import markdown_to_html_node, extract_title
 from logger import log_message
 

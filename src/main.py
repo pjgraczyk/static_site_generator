@@ -1,4 +1,5 @@
 import os
+import sys
 from logger import initialize_logger, log_message
 from file_utils import (
     move_src_to_dest_dir,
@@ -10,10 +11,11 @@ def main():
     initialize_logger()
     log_message("Starting the script", "info")
 
-    src_path = os.path.abspath(os.path.join(__file__, "../../static"))
-    dest_path = os.path.abspath(os.path.join(__file__, "../../public"))
-    content_path = os.path.abspath(os.path.join(__file__, "../../content"))
-    template_path = os.path.abspath(os.path.join(__file__, "../../"))
+    base_path = sys.argv[1]
+    src_path = os.path.join(base_path, "static")
+    dest_path = os.path.join(base_path, "public")
+    content_path = os.path.join(base_path, "content")
+    template_path = base_path
 
     move_src_to_dest_dir(src_path=src_path, dest_dir=dest_path)
     log_message("Source files moved to destination directory", "info")
